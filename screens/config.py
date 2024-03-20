@@ -1,9 +1,10 @@
-from kivy.app import App
+from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.switch import Switch
+from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner
-from utils.configmanager import ConfigurationManager
+from kivy.uix.switch import Switch
+from kivy.uix.textinput import TextInput
 
 configuration_schema = {
     "verbose": {"type": "boolean", "default": False},
@@ -11,27 +12,38 @@ configuration_schema = {
     # Add more settings as needed
 }
 
-class ConfigApp(App):
+class ConfigScreen(Screen):
     def build(self):
-        layout = BoxLayout(orientation='vertical')
-        for setting, props in configuration_schema.items():
-            if props['type'] == 'boolean':
-                switch = Switch(active=ConfigurationManager.get(setting, props['default']))
-                switch.bind(active=lambda instance, value: self.on_setting_change(setting, value))
-                layout.add_widget(Label(text=setting.capitalize()))
-                layout.add_widget(switch)
-            elif props['type'] == 'choice':
-                spinner = Spinner(
-                    text=ConfigurationManager.get(setting, props['default']),
-                    values=props['choices']
-                )
-                spinner.bind(text=lambda spinner, text: self.on_setting_change(setting, text))
-                layout.add_widget(Label(text=setting.capitalize()))
-                layout.add_widget(spinner)
-        return layout
+        layout = BoxLayout(orientation='vertical', padding=10, spacing=10)
 
-    def on_setting_change(self, setting, value):
-        ConfigurationManager.set(setting, value)
+        # Interface Selection
+        layout.add_widget(Label(text='Wireless Interface:'))
+        self.interface_spinner = Spinner(values=('wlan0', 'wlan1'))  # Example values
+        layout.add_widget(self.interface_spinner)
 
-if __name__ == '__main__':
-    ConfigApp().run()
+        # Attack Timeout
+        layout.add_widget(Label(text='Attack Timeout (seconds):'))
+        self.timeout_input = TextInput(text='60', input_filter='int')
+        layout.add_widget(self.timeout_input)
+
+        # Advanced Options - Example: MAC Address Randomization
+        layout.add_widget(Label(text='MAC Address Randomization:'))
+        self.mac_switch = Switch(active=True)
+        layout.add_widget(self.mac_switch)
+
+        # Save Button
+        save_btn = Button(text='Save Settings')
+        save_btn.bind(on_press=self.save_settings)
+        layout.add_widget(save_btn)
+
+        # Back Button
+        back_btn = Button(text='Back')
+        back_btn.bind(on_press=lambda x: self.manager.current = 'homepage')
+        layout.add_widget(back_btn)
+
+        self.add_widget(layout)
+
+    def save_settings(self, instance):
+        # Logic to save the settings
+        # You would typically update your configuration manager here
+        print(f"Interface: {self.interface_spinner.text}, Timeout: {self.timeout_input.text}, MAC Randomization: {'Enabled' if self.mac_switch.active else 'Disabled'}")

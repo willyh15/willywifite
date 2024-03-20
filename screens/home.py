@@ -1,4 +1,4 @@
-from kivy.app import App
+from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.gridlayout import GridLayout
 from kivy.uix.button import Button
@@ -6,9 +6,9 @@ from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
 
-class HomePage(BoxLayout):
+class HomeScreen(BoxLayout):
     def __init__(self, **kwargs):
-        super(HomePage, self).__init__(**kwargs)
+        super(HomeScreen, self).__init__(**kwargs)
         self.orientation = 'vertical'
         
         # Adjust the window size for demonstration purposes
