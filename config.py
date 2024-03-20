@@ -1,24 +1,20 @@
-import json
+from kivy.app import App
+from kivy.uix.boxlayout import BoxLayout
+from kivy.uix.switch import Switch
+from kivy.uix.label import Label
 
-class Configuration:
-    def __init__(self, config_file='config.json'):
-        self.config_file = config_file
-        self.settings = self.load_config()
+class ConfigApp(App):
+    def build(self):
+        self.config_manager = ConfigurationManager()
+        layout = BoxLayout(orientation='horizontal')
+        verbose_switch = Switch(active=self.config_manager.get('verbose', False))
+        verbose_switch.bind(active=self.on_verbose_toggle)
+        layout.add_widget(Label(text='Verbose'))
+        layout.add_widget(verbose_switch)
+        return layout
 
-    def load_config(self):
-        try:
-            with open(self.config_file, 'r') as file:
-                return json.load(file)
-        except (FileNotFoundError, json.JSONDecodeError):
-            return {}  # Return an empty config if none exists
+    def on_verbose_toggle(self, instance, value):
+        self.config_manager.set('verbose', value)
 
-    def save_config(self):
-        with open(self.config_file, 'w') as file:
-            json.dump(self.settings, file, indent=4)
-
-    def get_setting(self, key, default=None):
-        return self.settings.get(key, default)
-
-    def update_setting(self, key, value):
-        self.settings[key] = value
-        self.save_config()
+if __name__ == '__main__':
+    ConfigApp().run()
