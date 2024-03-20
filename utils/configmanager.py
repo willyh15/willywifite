@@ -1,5 +1,5 @@
 import json
-from config import configuration_schema
+from screens.config import configuration_schema
 
 class ConfigurationManager:
     def __init__(self, config_path="config.json"):

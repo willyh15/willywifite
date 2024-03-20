@@ -3,7 +3,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.switch import Switch
 from kivy.uix.label import Label
 from kivy.uix.spinner import Spinner
-from configmanager import ConfigurationManager
+from utils.configmanager import ConfigurationManager
 
 configuration_schema = {
     "verbose": {"type": "boolean", "default": False},
