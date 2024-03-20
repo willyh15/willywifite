@@ -1,4 +1,5 @@
 import json
+from config import configuration_schema
 
 class ConfigurationManager:
     def __init__(self, config_path="config.json"):
@@ -20,5 +21,15 @@ class ConfigurationManager:
         return self.settings.get(key, default)
 
     def set(self, key, value):
-        self.settings[key] = value
-        self.save_config()
+        # Example validation step
+        prop = configuration_schema.get(key)
+        if prop:
+            if prop['type'] == 'boolean' and isinstance(value, bool):
+                self.settings[key] = value
+                self.save_config()
+            elif prop['type'] == 'choice' and value in prop['choices']:
+                self.settings[key] = value
+                self.save_config()
+            # Add more validations as necessary
+        else:
+            print(f"Invalid setting: {key}")
