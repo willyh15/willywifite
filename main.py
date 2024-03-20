@@ -5,6 +5,7 @@ from kivy.lang import Builder
 # Import your configuration manager and other necessary components
 from screens.home import HomePage
 from screens.config import ConfigApp
+from screens.scan import ScanNetworksScreen
 from utils.configmanager import ConfigurationManager
 # Assuming you have other screens defined elsewhere
 # from screens import SettingsScreen, OtherScreen
@@ -20,8 +21,12 @@ class MainApp(App):
         # Add your homepage screen
         self.screen_manager.add_widget(HomePage(name='homepage'))
         self.screen_manager.add_widget(ConfigApp(name='configuration'))
+        self.screen_manager.add_widget(ScanNetworksScreen('scan'))
         
         # Optionally, add other screens
         # self.screen_manager.add_widget(SettingsScreen(name='settings'))
         
         return self.screen_manager
+    
+if __name__ == '__main__':
+    MainApp().run()   
