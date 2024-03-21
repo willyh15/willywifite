@@ -9,7 +9,10 @@ from kivy.core.window import Window
 class HomeScreen(BoxLayout):
     def __init__(self, **kwargs):
         super(HomeScreen, self).__init__(**kwargs)
-        self.orientation = 'vertical'
+        self.config_manager = ConfigurationManager()
+        self.event_binder = EventBinder()
+        self.content_updater = ContentUpdater()
+        self.persistence = Persistence()
         
         # Adjust the window size for demonstration purposes
         Window.size = (400, 600)
