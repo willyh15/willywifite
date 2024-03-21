@@ -5,6 +5,10 @@ from kivy.uix.button import Button
 from kivy.uix.label import Label
 from kivy.uix.scrollview import ScrollView
 from kivy.core.window import Window
+from utils.configmanager import ConfigurationManager
+from utils.eventbinder import EventBinder
+from utils.contentupdater import ContentUpdater
+from utils.persistence import Persistence
 
 class HomeScreen(BoxLayout):
     def __init__(self, **kwargs):
