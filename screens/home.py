@@ -51,3 +51,26 @@ class HomeScreen(BoxLayout):
         self.add_widget(actions_layout)
         self.add_widget(status_layout)
         self.add_widget(tips_layout)
+
+        # Load and display the current configuration
+        interface_label = Label(text=self.config_manager.get('interface'))
+        mode_label = Label(text=self.config_manager.get('mode'))
+        status_layout.add_widget(interface_label)
+        status_layout.add_widget(mode_label)
+
+        # Bind button click events
+        scan_button = Button(text='Scan Networks', size_hint_y=None, height=40)
+        self.event_binder.bind_button_click(scan_button, self.start_scan)
+
+        # Load persistent data such as recent actions
+        recent_label = Label(text=self.persistence.load('recent_action'))
+
+        # Add sections to the main layout with updated references
+        self.add_widget(actions_layout)
+        self.add_widget(status_layout)
+        self.add_widget(tips_layout)
+
+    def start_scan(self, instance):
+        # Method to start scan, could use Background utility class for async operations
+        pass
+
