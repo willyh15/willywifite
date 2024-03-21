@@ -4,40 +4,63 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.adapters.listadapter import ListAdapter
 
+# Importing utility classes
+from utils.datacarrier import DataCarrier
+from utils.contentupdater import ContentUpdater
+from utils.background import BackgroundProcess
+from utils.errorhandler import ErrorHandler
+
 class ScanNetworksScreen(Screen):
     def __init__(self, **kwargs):
         super(ScanNetworksScreen, self).__init__(**kwargs)
+        self.content_updater = ContentUpdater()
+        self.data_carrier = DataCarrier()
+        self.background_process = BackgroundProcess()
+        self.error_handler = ErrorHandler()
+
         layout = BoxLayout(orientation='vertical')
         
-        # Mock data for demonstration
-        networks_data = [{'text': f"Network {i}", 'is_selected': False} for i in range(1, 21)]
-        
-        # Adapter for the ListView
-        list_adapter = ListAdapter(data=networks_data,
-                                   cls=Button,  # Using Button for simplicity, you might want a custom widget
-                                   args_converter=lambda row_index, rec: {'text': rec['text'],
-                                                                           'size_hint_y': None,
-                                                                           'height': 40})
-        
+        # Setup the ListView with a placeholder for network data
+        self.networks_data = self.data_carrier.retrieve_data() or []
+        self.list_adapter = ListAdapter(data=self.networks_data,
+                                        cls=Button,
+                                        args_converter=lambda row_index, rec: {'text': rec['text'],
+                                                                                'size_hint_y': None,
+                                                                                'height': 40})
+
         # The ListView widget
-        networks_list = ListView(adapter=list_adapter)
+        self.networks_list = ListView(adapter=self.list_adapter)
         
         # Refresh and Back Buttons
         button_layout = BoxLayout(size_hint_y=None, height=50)
         refresh_btn = Button(text='Refresh', size_hint_x=None, width=100)
         back_btn = Button(text='Back', size_hint_x=None, width=100)
-        refresh_btn.bind(on_press=self.refresh_networks)  # Assume a method to refresh networks
+        refresh_btn.bind(on_press=self.on_refresh_press)  # Bind the press event to the method
         back_btn.bind(on_press=lambda x: self.manager.current = 'homepage')
         
         button_layout.add_widget(refresh_btn)
         button_layout.add_widget(back_btn)
         
         # Adding components to the layout
-        layout.add_widget(networks_list)
+        layout.add_widget(self.networks_list)
         layout.add_widget(button_layout)
         
         self.add_widget(layout)
 
-    def refresh_networks(self, *args):
-        # Method to refresh the list of networks
-        pass  # You'll need to implement the scanning logic or command invocation here
+    def on_refresh_press(self, instance):
+        # Use the error handler to manage scanning process exceptions
+        self.error_handler.handle(self.refresh_networks, instance)
+
+    def refresh_networks(self, instance):
+        # Start the network scanning in a background thread/process
+        self.background_process.run(self.perform_scan, instance.text)
+
+    def perform_scan(self, instance):
+        # Placeholder for the actual scanning logic
+        print(f"Scanning for networks...")
+        # Here you would have the actual logic to scan the networks
+        # For example, you could call a method that uses a library or system command to perform the scan
+
+    def update_network_list(self, new_data):
+        # Update the list view with new scan results using the content updater
+        self.content_updater.update(self.networks_list, new_data)
