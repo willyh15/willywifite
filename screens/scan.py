@@ -3,11 +3,11 @@ from kivy.uix.listview import ListView
 from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.button import Button
 from kivy.adapters.listadapter import ListAdapter
-
-# Importing utility classes
+from controllers.NetworkContoller import NetworkController
+from services.NetworkScanService import NetworkScanService
 from utils.datacarrier import DataCarrier
 from utils.contentupdater import ContentUpdater
-from utils.background import BackgroundProcess
+from utils.background import BackgroundTaskRunner
 from utils.errorhandler import ErrorHandler
 
 class ScanNetworksScreen(Screen):
@@ -15,8 +15,9 @@ class ScanNetworksScreen(Screen):
         super(ScanNetworksScreen, self).__init__(**kwargs)
         self.content_updater = ContentUpdater()
         self.data_carrier = DataCarrier()
-        self.background_process = BackgroundProcess()
+        self.background_process = BackgroundTaskRunner()
         self.error_handler = ErrorHandler()
+        self.network_controller = NetworkController(NetworkScanService())
 
         layout = BoxLayout(orientation='vertical')
         
@@ -46,6 +47,9 @@ class ScanNetworksScreen(Screen):
         layout.add_widget(button_layout)
         
         self.add_widget(layout)
+
+    def start_scan(self):
+        results = self.network_controller.perform_scan()
 
     def on_refresh_press(self, instance):
         # Use the error handler to manage scanning process exceptions
