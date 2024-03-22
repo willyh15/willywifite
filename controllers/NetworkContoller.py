@@ -3,7 +3,5 @@ class NetworkController:
         self.scanner_service = scanner_service
 
     def perform_scan(self):
-        # Logic to start a network scan
-        results = self.scanner_service.scan_networks()
-        # Post-processing if needed
+        results = self.scanner_service.scan_for_networks()
         return results
