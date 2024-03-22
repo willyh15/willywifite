@@ -1,14 +1,9 @@
 from kivy.uix.screenmanager import Screen
 from kivy.uix.boxlayout import BoxLayout
-from kivy.uix.gridlayout import GridLayout
-from kivy.uix.button import Button
-from kivy.uix.label import Label
-from kivy.uix.scrollview import ScrollView
-from kivy.core.window import Window
-from utils.configmanager import ConfigurationManager
-from utils.eventbinder import EventBinder
-from utils.contentupdater import ContentUpdater
-from utils.persistence import Persistence
+from controllers.home_controller import HomeController
+from services.network_scan_service import NetworkScanService
+from services.attack_history_service import AttackHistoryService
+from services.configuration_service import ConfigurationService
 
 class HomeScreen(BoxLayout):
     def __init__(self, **kwargs):
