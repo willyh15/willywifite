@@ -58,9 +58,9 @@ class HomeScreen(BoxLayout):
         status_layout.add_widget(interface_label)
         status_layout.add_widget(mode_label)
 
-        # Bind button click events
-        scan_button = Button(text='Scan Networks', size_hint_y=None, height=40)
-        self.event_binder.bind_button_click(scan_button, self.start_scan)
+        # Assume that you have a 'start_scan' button with id 'scan_button'
+        scan_button = self.ids.scan_button
+        scan_button.bind(on_release=self.on_start_scan)
 
         # Load persistent data such as recent actions
         recent_label = Label(text=self.persistence.load('recent_action'))
@@ -70,7 +70,8 @@ class HomeScreen(BoxLayout):
         self.add_widget(status_layout)
         self.add_widget(tips_layout)
 
-    def start_scan(self, instance):
-        # Method to start scan, could use Background utility class for async operations
-        pass
+    def on_start_scan(self, instance):
+        # Call the controller's method when the button is pressed
+        self.controller.start_scan()
+        # Optionally update the UI based on the controller's action
 
