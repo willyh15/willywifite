@@ -13,10 +13,12 @@ from utils.persistence import Persistence
 class HomeScreen(BoxLayout):
     def __init__(self, **kwargs):
         super(HomeScreen, self).__init__(**kwargs)
-        self.config_manager = ConfigurationManager()
-        self.event_binder = EventBinder()
-        self.content_updater = ContentUpdater()
-        self.persistence = Persistence()
+        # Initialize the controller with services
+        self.controller = HomeController(
+            network_scan_service=NetworkScanService(),
+            attack_history_service=AttackHistoryService(),
+            configuration_service=ConfigurationService()
+        )
         
         # Adjust the window size for demonstration purposes
         Window.size = (400, 600)
