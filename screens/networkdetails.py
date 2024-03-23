@@ -60,3 +60,4 @@ class NetworkDetailsScreen(Screen):
     def on_attack_error(self, error):
         # Handle attack errors (e.g., show an error message to the user)
         print(f"Error during attack: {error}")
+
