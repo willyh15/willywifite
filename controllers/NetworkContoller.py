@@ -1,7 +1,9 @@
-class NetworkController:
-    def __init__(self, scanner_service):
-        self.scanner_service = scanner_service
+from services.network_scan_service import NetworkScanService
 
-    def perform_scan(self):
-        results = self.scanner_service.scan_for_networks()
-        return results
+class NetworkController:
+    def __init__(self):
+        self.network_scan_service = NetworkScanService()
+        
+    def scan_networks(self):
+        # Use the network_scan_service to scan networks
+        return self.network_scan_service.perform_scan()
